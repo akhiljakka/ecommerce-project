@@ -11,5 +11,5 @@ import java.util.List;
 @RepositoryRestResource
 public interface StateRepository extends JpaRepository <State,Integer>{
 
-    List<State>findByCountryCode(@Param("code") String code);
+    List<State> findByCountryCode(@Param("code") String code);
 }
