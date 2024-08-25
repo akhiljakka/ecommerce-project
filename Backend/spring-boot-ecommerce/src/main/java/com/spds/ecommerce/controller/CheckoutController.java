@@ -1,10 +1,14 @@
 package com.spds.ecommerce.controller;
 
 
+import com.spds.ecommerce.dto.PaymentInfo;
 import com.spds.ecommerce.dto.Purchase;
 import com.spds.ecommerce.dto.PurchaseResponse;
 import com.spds.ecommerce.service.CheckoutService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin()
@@ -20,7 +24,15 @@ public class CheckoutController {
     public PurchaseResponse placeOrder(@RequestBody Purchase purchase){
         PurchaseResponse purchaseResponse = checkoutService.placeOrder(purchase);
         return purchaseResponse;
-        //Hello
+
+    }
+
+    @PostMapping("/payment-intent")
+    public ResponseEntity<String> createPaymentIntent(@RequestBody PaymentInfo paymentInfo) throws StripeException{
+        PaymentIntent paymentIntent = checkoutService.createPaymentIntent(paymentInfo);
+
+        String paymentStr = paymentIntent.toJson();
+        return new ResponseEntity<>(paymentStr, HttpStatus.OK);
     }
 
 
